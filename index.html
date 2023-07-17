@@ -1,57 +1,474 @@
-const todos = [{
- 	  "userId": 1,
- 	  "id": 1,
- 	  "title": "delectus aut autem",
- 	  "completed": false
- 	}, {
- 	  "userId": 1,
- 	  "id": 2,
- 	  "title": "quis ut nam facilis et officia qui",
- 	  "completed": false
- 	}, {
- 	  "userId": 1,
- 	  "id": 3,
- 	  "title": "fugiat veniam minus",
- 	  "completed": false
- 	}, {
- 	  "userId": 1,
- 	  "id": 4,
- 	  "title": "et porro tempora",
- 	  "completed": true
- 	}, {
- 	  "userId": 1,
- 	  "id": 5,
- 	  "title": "laboriosam mollitia et enim quasi adipisci quia provident illum",
- 	  "completed": false
- 	}, {
- 	  "userId": 1,
- 	  "id": 6,
- 	  "title": "qui ullam ratione quibusdam voluptatem quia omnis",
- 	  "completed": false
- 	}, {
- 	  "userId": 1,
- 	  "id": 7,
- 	  "title": "illo expedita consequatur quia in",
- 	  "completed": false
- 	}, {
- 	  "userId": 1,
- 	  "id": 8,
- 	  "title": "quo adipisci enim quam ut ab",
- 	  "completed": true
- 	}, {
- 	  "userId": 1,
- 	  "id": 9,
- 	  "title": "molestiae perspiciatis ipsa",
- 	  "completed": false
- 	}, {
- 	  "userId": 1,
- 	  "id": 10,
- 	  "title": "illo est ratione doloremque quia maiores aut",
- 	  "completed": true
- 	}]
- 	const arrayPaginate = (array, itemsPerPage, goTo) => {
- 	  array = [...array]
- 	  const itemsToSkip = itemsPerPage * (goTo - 1);
- 	  const totalItems = array.length
- 	  const result = array.splice(itemsToSkip, itemsPerPage) console.log(result)
- 	} //2items itemsPerPage , to go page 3 arrayPaginate(todos,2,3)
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snippets App</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" rel="stylesheet">
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button[type="submit"] {
+      width: auto;
+    }
+
+    input[type="text"]#search,
+    select#filterLanguage {
+      display: inline-block;
+      width: 45%;
+      margin-right: 10px;
+    }
+	
+	li { 
+		margin-bottom: 10px;
+	}
+
+    @media only screen and (max-width: 600px) {
+      input[type="text"]#search,
+      select#filterLanguage {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+	  
+	  li { 
+		margin-bottom: 10px;
+	  }
+    }
+    
+    pre {
+      padding: 10px;
+      background-color: #f5f5f5;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Snippets App</h1>
+
+  <div class="container">
+    <form id="snippetForm">
+      <label for="title">Title:</label>
+      <input type="text" id="title" required>
+
+      <label for="description">Description:</label>
+      <input type="text" id="description" required>
+
+      <label for="code">Code:</label>
+      <textarea id="code" required></textarea>
+
+      <label for="language">Language:</label>
+      <select id="language">
+        <option value="">All</option>
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <option value="java">Java</option>
+        <option value="c">C</option>
+        <option value="c++">C++</option>
+        <option value="csharp">C#</option>
+        <option value="ruby">Ruby</option>
+        <option value="go">Go</option>
+        <option value="swift">Swift</option>
+        <option value="typescript">TypeScript</option>
+        <option value="php">PHP</option>
+        <option value="rust">Rust</option>
+        <option value="kotlin">Kotlin</option>
+        <option value="scala">Scala</option>
+        <option value="r">R</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="sql">SQL</option>
+        <option value="perl">Perl</option>
+        <option value="lua">Lua</option>
+        <option value="matlab">MATLAB</option>
+        <option value="powershell">PowerShell</option>
+        <option value="shell">Shell</option>
+        <option value="objectivec">Objective-C</option>
+        <option value="groovy">Groovy</option>
+        <option value="haskell">Haskell</option>
+        <!-- Add more options for different programming languages -->
+      </select>
+
+      <button type="submit">Create Snippet</button>
+    </form>
+
+    <div>
+      <label for="search">Search:</label>
+      <input type="text" id="search" placeholder="Enter search term">
+      <label for="filterLanguage">Filter by Language:</label>
+      <select id="filterLanguage">
+        <option value="">All</option>
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <option value="java">Java</option>
+        <!-- Add more options for different programming languages -->
+      </select>
+    </div>
+
+    <ul id="snippetList"></ul>
+
+    <button onclick="downloadFile()">download storage</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+  <script>
+    const BASE_URL = 'https://igot-snippets.onrender.com';
+
+    let snippets = []; // Array to store all snippets
+
+    // Function to send GET request to retrieve all snippets
+    function getSnippets() {
+      fetch(`${BASE_URL}/snippets`)
+        .then(response => response.json())
+        .then(data => {
+          snippets = data; // Store all snippets in the array
+          renderSnippets(snippets); // Render all snippets
+        })
+        .catch(error => console.error(error));
+    }
+
+    // Function to handle search input
+    document.getElementById('search').addEventListener('input', function () {
+      filterSnippets();
+    });
+
+    // Function to handle filter by language
+    document.getElementById('filterLanguage').addEventListener('change', function () {
+      filterSnippets();
+    });
+
+    // Function to filter snippets by search term and language
+    function filterSnippets() {
+      const searchInput = document.getElementById('search').value.toLowerCase();
+      const filterLanguage = document.getElementById('filterLanguage').value;
+
+      let filteredSnippets;
+
+      if (searchInput && filterLanguage) {
+        filteredSnippets = snippets.filter(snippet => {
+          const title = snippet.title.toLowerCase();
+          const description = snippet.description.toLowerCase();
+          const language = snippet.language;
+
+          // Check if the snippet matches the search term and language filter
+          return (title.includes(searchInput) || description.includes(searchInput)) &&
+            language === filterLanguage;
+        });
+      } else if (searchInput) {
+        filteredSnippets = snippets.filter(snippet => {
+          const title = snippet.title.toLowerCase();
+          const description = snippet.description.toLowerCase();
+
+          // Check if the snippet matches the search term
+          return title.includes(searchInput) || description.includes(searchInput);
+        });
+      } else if (filterLanguage) {
+        filteredSnippets = snippets.filter(snippet => {
+          const language = snippet.language;
+
+          // Check if the snippet matches the language filter
+          return language === filterLanguage;
+        });
+      } else {
+        filteredSnippets = snippets; // No filters applied, display all snippets
+      }
+
+      renderSnippets(filteredSnippets); // Render filtered snippets
+    }
+
+    // Function to render the snippets on the page
+    function renderSnippets(snippetArr) {
+      const snippetList = document.getElementById('snippetList');
+      snippetList.innerHTML = '';
+
+      snippetArr.forEach(snippet => {
+        const listItem = document.createElement('li');
+        listItem.setAttribute('data-id', snippet.id);
+
+        const snippetTitle = document.createElement('strong');
+        snippetTitle.textContent = snippet.title;
+        snippetTitle.addEventListener('click', () => {
+          showSnippetDetails(snippet);
+        });
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.addEventListener('click', () => {
+          editSnippet(snippet.id);
+        });
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => {
+           const confirmation = prompt("enter password:");
+           if(confirmation == 'condom77'){
+              deleteSnippet(snippet.id);
+
+           }else{
+            alert("bad password")
+           }
+        });
+
+        listItem.appendChild(snippetTitle);
+        listItem.appendChild(document.createTextNode(': '));
+        listItem.appendChild(editButton);
+        listItem.appendChild(document.createTextNode(' | '));
+        listItem.appendChild(deleteButton);
+        snippetList.appendChild(listItem);
+      });
+
+      Prism.highlightAll(); // Apply syntax highlighting
+    }
+
+    // Function to show the details of a snippet
+    function showSnippetDetails(snippet) {
+      const snippetDetails = document.createElement('div');
+
+      const snippetTitle = document.createElement('h2');
+      snippetTitle.textContent = snippet.title;
+
+      const snippetDescription = document.createElement('p');
+      snippetDescription.textContent = 'Description: ' + snippet.description;
+
+      const codeContainer = document.createElement('pre');
+      const codeElement = document.createElement('code');
+      codeElement.classList.add('language-' + snippet.language.toLowerCase());
+      codeElement.textContent = snippet.code;
+      codeContainer.appendChild(codeElement);
+
+      const language = document.createElement('p');
+      language.textContent = 'Language: ' + snippet.language;
+
+      const backButton = document.createElement('button');
+      backButton.textContent = 'Back';
+      backButton.addEventListener('click', () => {
+        snippetList.removeChild(snippetDetails);
+      });
+
+      snippetDetails.appendChild(snippetTitle);
+      snippetDetails.appendChild(snippetDescription);
+      snippetDetails.appendChild(codeContainer);
+      snippetDetails.appendChild(language);
+      snippetDetails.appendChild(backButton);
+
+      const snippetList = document.getElementById('snippetList');
+      snippetList.innerHTML = '';
+      snippetList.appendChild(snippetDetails);
+    }
+
+    // Function to send POST request to create a new snippet
+    function createSnippet(title, description, code, language) {
+      fetch(`${BASE_URL}/snippets`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title, description, code, language })
+      })
+        .then(response => response.json())
+        .then(snippet => {
+          console.log('Snippet created:', snippet);
+          getSnippets(); // Refresh snippets after creating a new one
+        })
+        .catch(error => console.error(error));
+    }
+
+    // Function to send PUT request to update an existing snippet
+    function updateSnippet(updatedSnippet) {
+      fetch(`${BASE_URL}/snippets/${updatedSnippet.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedSnippet)
+      })
+        .then(response => response.json())
+        .then(snippet => {
+          console.log('Snippet updated:', snippet);
+          getSnippets(); // Refresh snippets after updating
+        })
+        .catch(error => console.error(error));
+    }
+
+    // Function to send DELETE request to delete a snippet
+    function deleteSnippet(id) {
+      fetch(`${BASE_URL}/snippets/${id}`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(snippet => {
+          console.log('Snippet deleted:', snippet);
+          getSnippets(); // Refresh snippets after deleting
+        })
+        .catch(error => console.error(error));
+    }
+
+    // Function to handle form submission
+    document.getElementById('snippetForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const code = document.getElementById('code').value;
+      const language = document.getElementById('language').value;
+
+      if (title && description && code && language) {
+        createSnippet(title, description, code, language);
+        document.getElementById('title').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('code').value = '';
+        document.getElementById('language').value = '';
+      }
+    });
+
+    // Function to handle editing a snippet
+    function editSnippet(id) {
+      const snippet = snippets.find(s => s.id === id);
+
+      if (!snippet) {
+        return;
+      }
+
+      const editForm = document.createElement('form');
+
+      const titleInput = document.createElement('input');
+      titleInput.type = 'text';
+      titleInput.value = snippet.title;
+
+      const descriptionInput = document.createElement('input');
+      descriptionInput.type = 'text';
+      descriptionInput.value = snippet.description;
+
+      const codeInput = document.createElement('textarea');
+      codeInput.value = snippet.code;
+
+      const languageInput = document.createElement('select');
+      const languages = ['JavaScript', 'Python', 'Java']; // Add more options for different programming languages
+      languages.forEach(lang => {
+        const option = document.createElement('option');
+        option.value = lang.toLowerCase();
+        option.text = lang;
+        if (lang.toLowerCase() === snippet.language) {
+          option.selected = true;
+        }
+        languageInput.appendChild(option);
+      });
+
+      const updateButton = document.createElement('button');
+      updateButton.textContent = 'Update';
+      updateButton.addEventListener('click', () => {
+        const updatedSnippet = {
+          id: snippet.id,
+          title: titleInput.value,
+          description: descriptionInput.value,
+          code: codeInput.value,
+          language: languageInput.value
+        };
+
+        updateSnippet(updatedSnippet);
+        snippetList.removeChild(editForm);
+      });
+
+      const cancelButton = document.createElement('button');
+      cancelButton.textContent = 'Cancel';
+      cancelButton.addEventListener('click', () => {
+        snippetList.removeChild(editForm);
+      });
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.addEventListener('click', () => {
+        deleteSnippet(snippet.id);
+      });
+
+      editForm.appendChild(document.createTextNode('Title: '));
+      editForm.appendChild(titleInput);
+      editForm.appendChild(document.createElement('br'));
+      editForm.appendChild(document.createTextNode('Description: '));
+      editForm.appendChild(descriptionInput);
+      editForm.appendChild(document.createElement('br'));
+      editForm.appendChild(document.createTextNode('Code: '));
+      editForm.appendChild(codeInput);
+      editForm.appendChild(document.createElement('br'));
+      editForm.appendChild(document.createTextNode('Language: '));
+      editForm.appendChild(languageInput);
+      editForm.appendChild(document.createElement('br'));
+      editForm.appendChild(updateButton);
+      editForm.appendChild(cancelButton);
+      editForm.appendChild(document.createElement('br'));
+      editForm.appendChild(deleteButton);
+
+      const snippetList = document.getElementById('snippetList');
+      const listItem = snippetList.querySelector(`[data-id="${id}"]`);
+
+      listItem.innerHTML = '';
+      listItem.appendChild(editForm);
+    }
+
+    function downloadFile() {
+      const downloadUrl = `${BASE_URL}/download`;
+      const destinationPath = 'snippets.json';
+
+      fetch(downloadUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error downloading file');
+          }
+          return response.blob();
+        })
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = destinationPath;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        })
+        .catch((error) => {
+          console.error('Error downloading file:', error);
+        });
+    }
+
+    // Initial load of snippets
+    getSnippets();
+  </script>
+</body>
+</html>
